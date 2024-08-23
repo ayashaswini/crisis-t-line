@@ -13,7 +13,9 @@ def main():
         # execute ETL pipeline
         input_data = extract_data(spark)
         # null check
-        not_null_df = input_data.filter("_col is not NULL")
+        columns = input_data.schema.names
+        for c in columns:
+            input_data.filter("c is not NULL")
         store_in_ext_table(not_null_df,"bronze_table","part_fields") #store raw data in broze layer
         data_transformed = basic_transform_data(not_null_df) 
         store_in_ext_table(data_transformed,"silver_table","part_fields") #store data in silver layer
